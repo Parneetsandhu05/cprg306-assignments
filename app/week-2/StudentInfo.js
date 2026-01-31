@@ -3,9 +3,11 @@ import Link from "next/link";
 export default function StudentInfo() {
   return (
     <div>
-      <p>Parneet Kaur</p> 
-      <Link href="https://github.com/parneetsandhu05/cprg306-assignments">
+      <p>Name: Parneet Kaur</p> 
+      <p>
+      Github: <Link href="https://github.com/parneetsandhu05/cprg306-assignments">
    My GitHub Repository</Link>
+      </p>
     </div>
   );
 }
