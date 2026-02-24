@@ -2,87 +2,88 @@
 
 import { useState } from "react";
 
-// Part 2: Added the onAddItem prop to the function arguments
 export default function NewItem({ onAddItem }) {
-  // Initialize State
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("produce");
 
-  // Handle Form Submission
+  // Programmatic array for categories
+  const categories = [
+    "produce", "dairy", "bakery", "meat", "frozen foods", 
+    "canned goods", "dry goods", "beverages", "snacks", "household", "other"
+  ];
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    const item = {
+      id: Math.random().toString(36).substring(2, 9),
+      name,
+      quantity,
+      category,
+    };
 
-    // Part 2: Generate a random ID as required
-    const id = Math.random().toString(36).substring(2, 9);
-
-    // Create the item object
-    const item = { id, name, quantity, category };
-
-    // Part 2: Call the function passed as a prop instead of alert()
     onAddItem(item);
-
-    // Reset State
     setName("");
     setQuantity(1);
     setCategory("produce");
   };
 
   return (
-    <div className="flex justify-center w-full">
-      <form 
-        onSubmit={handleSubmit} 
-        className="p-2 m-4 bg-slate-900 text-black max-w-sm w-full rounded-lg shadow-xl"
-      >
-        <div className="mb-2">
-          <input
-            type="text"
-            placeholder="Item name"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            // Added bg-slate-800 and text-white for better visibility
-            className="w-full mt-1 border-2 border-gray-300 p-2 rounded-lg font-sans bg-slate-800 text-white placeholder-gray-400"
-          />
-        </div>
+    <form onSubmit={handleSubmit} className="p-4 m-4 bg-slate-900 rounded-lg max-w-sm w-full text-white">
+      {/* Name Field with Label/ID connection */}
+      <div className="mb-4">
+        <label htmlFor="name" className="block mb-1 font-bold">Item Name</label>
+        <input
+          id="name"
+          type="text"
+          placeholder="Item name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full p-2 rounded-md bg-slate-800 border border-slate-700 text-white focus:border-blue-500 outline-none"
+        />
+      </div>
 
-        <div className="flex justify-between">
+      <div className="flex gap-4">
+        {/* Quantity Field */}
+        <div className="flex-1">
+          <label htmlFor="quantity" className="block mb-1 font-bold">Qty</label>
           <input
+            id="quantity"
             type="number"
             min="1"
             max="99"
             required
             value={quantity}
             onChange={(e) => setQuantity(Number(e.target.value))}
-            className="w-20 ml-1 border-2 border-gray-300 p-2 rounded-lg font-sans bg-slate-800 text-white"
+            className="w-full p-2 rounded-md bg-slate-800 border border-slate-700 text-white"
           />
-
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="ml-1 border-2 border-gray-300 p-2 rounded-lg font-sans bg-slate-800 text-white"
-          >
-            <option value="produce text-black">Produce</option>
-            <option value="dairy text-black">Dairy</option>
-            <option value="bakery text-black">Bakery</option>
-            <option value="meat text-black">Meat</option>
-            <option value="frozen text-black">Frozen Foods</option>
-            <option value="canned text-black">Canned Goods</option>
-            <option value="dry text-black">Dry Goods</option>
-            <option value="beverages text-black">Beverages</option>
-            <option value="snacks text-black">Snacks</option>
-            <option value="household text-black">Household</option>
-            <option value="other text-black">Other</option>
-          </select>
         </div>
 
-        <button
-          type="submit"
-          className="w-full mt-4 py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-        >
-          +
-        </button>
-      </form>
-    </div>
+        {/* Category Field - Programmatic Rendering */}
+        <div className="flex-1">
+          <label htmlFor="category" className="block mb-1 font-bold">Category</label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 rounded-md bg-slate-800 border border-slate-700 text-white capitalize"
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat} className="bg-slate-800 text-white">
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full mt-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-md font-bold transition-colors"
+      >
+        Add Item
+      </button>
+    </form>
   );
 }
