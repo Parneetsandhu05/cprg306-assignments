@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+
 import ItemList from "./item-list";
 import NewItem from "./new-item";
 import MealIdeas from "./meal-ideas";
-
+import { useState, useEffect } from "react"; 
 import { getItems, addItem } from "../_services/shopping-list-service";
 // 1. Import the hook from your contexts folder
 import { useUserAuth } from "../../contexts/AuthContext"; 
@@ -16,7 +16,21 @@ export default function Page() {
 
   const [items, setItems] = useState([]);
   const [selectedItemName, setSelectedItemName] = useState("");
+  const loadItems = async () => {
+    try {
+      const itemsList = await getItems(user.uid);
+      setItems(itemsList);
+    } catch (error) {
+      console.error("Error loading items:", error);
+    }
+  };
 
+
+  useEffect(() => {
+    if (user) {
+      loadItems();
+    }
+  }, [user]); // This runs as soon as the user logs in
   const handleAddItem = async (newItem) => {
     if (user) {
       try {
